@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -46,6 +47,12 @@ android {
 }
 
 dependencies {
+
+    // Firebase Authentication Library
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
+
+    // Constraint layout
+    implementation 'androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha03'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation "androidx.compose.ui:ui:$compose_version"

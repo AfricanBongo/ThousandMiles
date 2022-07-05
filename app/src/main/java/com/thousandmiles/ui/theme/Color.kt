@@ -2,7 +2,10 @@ package com.thousandmiles.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val lightBlue = Color(0xFFCCE6E9)
+val lighterBlue = Color(0xFFE5F2F4)
+val lightYellow = Color(0xFFEDE999)
+val lighterYellow = Color(0xFFFDFCF2)
+val darkYellow = Color(0xFFACA747)
+val darkerYellow = Color(0xFF413E08)
+val lightGreen = Color(0xFFC0E5C3)

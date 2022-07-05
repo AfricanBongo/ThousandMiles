@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "264354139259",
+    "project_id": "thousandmiles-33c61",
+    "storage_bucket": "thousandmiles-33c61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264354139259:android:b2c14ac61e6e9a7350e6de",
+        "android_client_info": {
+          "package_name": "com.thousandmiles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264354139259-fc5bu4hnosgat6aj85q4vlcd51emrq0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGlJnjPfE1GIlIkCm0wWMEbivtZQaA7wE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264354139259-fc5bu4hnosgat6aj85q4vlcd51emrq0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
