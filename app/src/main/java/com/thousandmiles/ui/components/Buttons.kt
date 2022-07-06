@@ -7,6 +7,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thousandmiles.ui.theme.ThousandMilesTheme
@@ -22,11 +24,11 @@ fun PrimaryButton(
 ) {
     Button(
         colors = ButtonDefaults.buttonColors(
-            contentColor = MaterialTheme.colors.onSecondary,
-            backgroundColor = MaterialTheme.colors.secondary
+            contentColor = Color.White,
+            backgroundColor = MaterialTheme.colors.primaryVariant
         ),
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier.clip(MaterialTheme.shapes.medium)
     ) {
         Text(text = text, style = MaterialTheme.typography.body1)
     }

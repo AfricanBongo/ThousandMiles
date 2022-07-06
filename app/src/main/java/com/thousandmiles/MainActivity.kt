@@ -9,6 +9,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import com.thousandmiles.ui.authentication.AuthenticationScreen
 import com.thousandmiles.ui.theme.ThousandMilesTheme
@@ -18,6 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ThousandMilesTheme {
+                window?.statusBarColor = MaterialTheme.colors.secondary.toArgb()
                 AuthenticationScreen(Modifier.fillMaxSize())
             }
         }

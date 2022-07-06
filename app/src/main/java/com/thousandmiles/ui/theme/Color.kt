@@ -2,6 +2,7 @@ package com.thousandmiles.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val darkBlue = Color(0xFF1E2C2E)
 val lightBlue = Color(0xFFCCE6E9)
 val lighterBlue = Color(0xFFE5F2F4)
 val lightYellow = Color(0xFFEDE999)

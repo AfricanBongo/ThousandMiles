@@ -9,7 +9,8 @@ import androidx.compose.ui.unit.sp
 import com.thousandmiles.R
 
 val signikaFontFamily = FontFamily(
-    Font(R.font.signika)
+    Font(R.font.signika_bold, weight = FontWeight.Bold),
+    Font(R.font.signika_semibold, weight = FontWeight.SemiBold)
 )
 val latoFontFamily = FontFamily(
     Font(R.font.lato_regular, weight = FontWeight.Normal),

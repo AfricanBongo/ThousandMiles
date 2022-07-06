@@ -7,8 +7,10 @@
     <string name="auth_tagline_3">begins with a single step!</string>
     <string name="sign_in_phrase">\'Step\' right in</string>
     <string name="sign_up_phrase">\'Step\' right up</string>
+    <string name="email">Email</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="forgot_pass">Forgot your password</string>
