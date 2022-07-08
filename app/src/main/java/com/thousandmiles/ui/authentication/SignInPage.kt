@@ -16,24 +16,30 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.thousandmiles.R
 import com.thousandmiles.ui.components.PrimaryButton
+import com.thousandmiles.viewmodel.auth.SignInViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.thousandmiles.ui.components.TextFieldErrorMessage
 
-private const val userF = "username"
+private const val emailF = "username"
 private const val passF = "password"
 private const val signB = "sign_btn"
 private const val signP = "sign_phrase"
 private const val forgot = "forgot"
 
 @Composable
-fun SignInPage(modifier: Modifier = Modifier) {
+fun SignInPage(
+    modifier: Modifier = Modifier,
+    viewModel: SignInViewModel = viewModel(),
+) {
     // Resources from res folder
     val signInPhrase = stringResource(id = R.string.sign_in_phrase)
-    val usernameLabel = stringResource(id = R.string.username)
+    val emailLabel = stringResource(id = R.string.email)
     val passwordLabel = stringResource(id = R.string.password)
     val forgotPasswordLabel = stringResource(id = R.string.forgot_pass)
     val signInButtonLabel = stringResource(id = R.string.sign_in)
+    val invalidEmailLabel = stringResource(id = R.string.invalid_email)
 
-    var text by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
+    val signInState = viewModel.signInState
 
     ConstraintLayout(
         constraintSet = authBoxConstraints(),
@@ -45,23 +51,26 @@ fun SignInPage(modifier: Modifier = Modifier) {
             modifier = Modifier.layoutId(signP)
         )
 
-        // Username
+        // Email
         AuthenticationTextField(
-            value = text,
-            labelText = usernameLabel,
-            onValueChange = { text = it},
+            value = signInState.email,
+            labelText = emailLabel,
+            onValueChange = viewModel::onEmailChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .layoutId(userF)
-
+                .layoutId(emailF),
+            isError = viewModel.validEmailFormatError,
+            onErrorShow = {
+                TextFieldErrorMessage(errorMessage = invalidEmailLabel)
+            }
         )
 
         // Password
         AuthenticationTextField(
-            value = passwordText,
+            value = signInState.password,
             labelText = passwordLabel,
             isPassword = true,
-            onValueChange = { passwordText = it},
+            onValueChange = viewModel::onPasswordChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .layoutId(passF)
@@ -84,7 +93,8 @@ fun SignInPage(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .layoutId(signB)
                 .fillMaxWidth()
-                .height(52.dp)
+                .height(52.dp),
+            onClick = viewModel::signIn
         )
     }
 }
@@ -93,7 +103,7 @@ private fun authBoxConstraints(): ConstraintSet {
     return ConstraintSet {
         val signPhrase = createRefFor(signP)
         val signButton = createRefFor(signB)
-        val usernameField = createRefFor(userF)
+        val emailField = createRefFor(emailF)
         val passwordField = createRefFor(passF)
         val forgotText = createRefFor(forgot)
 
@@ -102,13 +112,13 @@ private fun authBoxConstraints(): ConstraintSet {
             start.linkTo(parent.start)
         }
 
-        constrain(usernameField) {
+        constrain(emailField) {
             top.linkTo(signPhrase.bottom, 32.dp)
             start.linkTo(parent.start)
         }
 
         constrain(passwordField) {
-            top.linkTo(usernameField.bottom, 12.dp)
+            top.linkTo(emailField.bottom, 12.dp)
             start.linkTo(parent.start)
         }
 

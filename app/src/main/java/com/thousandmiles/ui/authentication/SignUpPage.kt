@@ -2,39 +2,45 @@ package com.thousandmiles.ui.authentication
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thousandmiles.R
 import com.thousandmiles.ui.components.PrimaryButton
+import com.thousandmiles.ui.components.TextFieldErrorMessage
+import com.thousandmiles.viewmodel.auth.SignUpViewModel
 
 private const val emailF = "email"
-private const val userF = "username"
 private const val passF = "password"
 private const val confirmPassF = "confirm"
 private const val signB = "sign_btn"
 private const val signP = "sign_phrase"
 
 @Composable
-fun SignUpPage(modifier: Modifier = Modifier) {
+fun SignUpPage(
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel = viewModel(),
+) {
     // Resources from res folder
     val signUpPhrase = stringResource(id = R.string.sign_up_phrase)
     val emailLabel = stringResource(id = R.string.email)
-    val usernameLabel = stringResource(id = R.string.username)
     val passwordLabel = stringResource(id = R.string.password)
     val confirmPasswordLabel = stringResource(id = R.string.confirm_password)
-    val signInButtonLabel = stringResource(id = R.string.sign_up)
+    val signUpButtonLabel = stringResource(id = R.string.sign_up)
+    val passwordsDontMatchLabel = stringResource(id = R.string.passwords_dont_match)
+    val invalidEmailFormatLabel = stringResource(id = R.string.invalid_email)
 
-    var emailText by remember { mutableStateOf("") }
-    var usernameText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
-    var confirmPasswordText by remember { mutableStateOf("") }
+    // State that contains all values for the fields.
+    val signUpState = viewModel.signUpState
 
     ConstraintLayout(
         constraintSet = signUpPageConstraints(),
@@ -48,32 +54,28 @@ fun SignUpPage(modifier: Modifier = Modifier) {
 
         // Email
         AuthenticationTextField(
-            value = emailText,
+            value = signUpState.email,
             labelText = emailLabel,
-            onValueChange = { emailText = it},
+            onValueChange = viewModel::onEmailChange,
+            isError = viewModel.validEmailFormatError,
+            onErrorShow = {
+                TextFieldErrorMessage(errorMessage = invalidEmailFormatLabel)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .layoutId(emailF)
 
         )
 
-        // Username
-        AuthenticationTextField(
-            value = usernameText,
-            labelText = usernameLabel,
-            onValueChange = { usernameText = it},
-            modifier = Modifier
-                .fillMaxWidth()
-                .layoutId(userF)
-
-        )
-
         // Password
         AuthenticationTextField(
-            value = passwordText,
+            value = signUpState.password,
             labelText = passwordLabel,
             isPassword = true,
-            onValueChange = { passwordText = it},
+            onValueChange = viewModel::onPasswordChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .layoutId(passF)
@@ -82,23 +84,27 @@ fun SignUpPage(modifier: Modifier = Modifier) {
 
         // Confirm password
         AuthenticationTextField(
-            value = confirmPasswordText,
+            value = signUpState.confirmPassword,
             labelText = confirmPasswordLabel,
             isPassword = true,
-            onValueChange = { confirmPasswordText = it},
+            onValueChange = viewModel::onConfirmPasswordChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .layoutId(confirmPassF)
-
+                .layoutId(confirmPassF),
+            isError = viewModel.passwordMatchingError,
+            onErrorShow = {
+                TextFieldErrorMessage(errorMessage = passwordsDontMatchLabel)
+            }
         )
 
         // Sign up button
         PrimaryButton(
-            text = signInButtonLabel,
+            text = signUpButtonLabel,
             modifier = Modifier
                 .layoutId(signB)
                 .fillMaxWidth()
-                .height(52.dp)
+                .height(52.dp),
+            onClick = viewModel::signUp
         )
     }
 }
@@ -108,7 +114,6 @@ private fun signUpPageConstraints(): ConstraintSet {
         val signPhrase = createRefFor(signP)
         val signButton = createRefFor(signB)
         val emailField = createRefFor(emailF)
-        val usernameField = createRefFor(userF)
         val passwordField = createRefFor(passF)
         val confirmPasswordField = createRefFor(confirmPassF)
 
@@ -122,13 +127,8 @@ private fun signUpPageConstraints(): ConstraintSet {
             start.linkTo(parent.start)
         }
 
-        constrain(usernameField) {
-            top.linkTo(emailField.bottom, 12.dp)
-            start.linkTo(parent.start)
-        }
-
         constrain(passwordField) {
-            top.linkTo(usernameField.bottom, 12.dp)
+            top.linkTo(emailField.bottom, 12.dp)
             start.linkTo(parent.start)
         }
 

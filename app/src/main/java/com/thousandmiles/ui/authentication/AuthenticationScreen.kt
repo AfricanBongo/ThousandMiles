@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -94,8 +95,9 @@ fun AuthenticationScreen(
 
             // Tabs for Sign In and Sign Up page.
             TabRow(
-                backgroundColor = MaterialTheme.colors.background,
+                backgroundColor = Color.Transparent,
                 selectedTabIndex = pagerState.currentPage,
+                divider = {},
                 modifier = Modifier
                     .weight(1f)
                     .requiredWidth(200.dp)

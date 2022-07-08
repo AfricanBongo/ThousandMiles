@@ -1,5 +1,8 @@
 package com.thousandmiles.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,12 +12,19 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 
 /**
  * Normal text-field
+ *
+ * @param isError If true then [onErrorShow] is animated into visibility.
+ * @param onErrorShow The composable to be shown when an error occurs, a [TextFieldErrorMessage]
+ * can also be used here.
+ * @see TextField
  */
 @Composable
 fun MTextField(
@@ -23,22 +33,46 @@ fun MTextField(
     placeholderText: String,
     colors: TextFieldColors,
     modifier: Modifier = Modifier,
+    isError: Boolean = false,
+    onErrorShow: @Composable () -> Unit = {},
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    trailingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (String) -> Unit = {}
 ) {
-    TextField(
-        singleLine = true,
-        value = value,
-        onValueChange = onValueChange,
-        colors = colors,
-        modifier = modifier.clip(MaterialTheme.shapes.medium),
-        textStyle = MaterialTheme.typography.body1,
-        label = {
-            Text(text = labelText)
-        },
-        placeholder = {
-            Text(text = placeholderText, style = MaterialTheme.typography.body1)
+    Column(modifier = modifier) {
+
+        // Show only when there's an error
+        AnimatedVisibility(visible = isError, modifier = Modifier.fillMaxWidth()) {
+            // Error composable
+            onErrorShow()
         }
-    )
+
+        Spacer(modifier = if (isError) modifier.height(8.dp) else modifier.height(0.dp))
+
+        // Input field
+        TextField(
+            singleLine = true,
+            value = value,
+            onValueChange = onValueChange,
+            isError = isError,
+            colors = colors,
+            shape = MaterialTheme.shapes.medium,
+            textStyle = MaterialTheme.typography.body1,
+            visualTransformation = visualTransformation,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            trailingIcon = trailingIcon,
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text(text = labelText)
+            },
+            placeholder = {
+                Text(text = placeholderText, style = MaterialTheme.typography.body1)
+            }
+        )
+    }
 }
 
 /**
@@ -47,6 +81,8 @@ fun MTextField(
  * Credit to Valeriy Katkov, for password text field code.
  *
  * [https://stackoverflow.com/a/65665564][StackOverflow URL]
+ *
+ * @see MTextField
  */
 @Composable
 fun PasswordTextField(
@@ -54,17 +90,21 @@ fun PasswordTextField(
     labelText: String,
     colors: TextFieldColors,
     modifier: Modifier = Modifier,
+    isError: Boolean = false,
+    onErrorShow: @Composable () -> Unit = {},
     onPasswordChange: (String) -> Unit = {}
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    TextField(
+
+    MTextField(
         value = password,
-        onValueChange = onPasswordChange,
+        labelText = labelText,
+        placeholderText = "",
+        isError = isError,
+        onErrorShow = onErrorShow,
         colors = colors,
-        modifier = modifier.clip(MaterialTheme.shapes.medium),
-        textStyle = MaterialTheme.typography.body1,
-        label = { Text(labelText) },
-        singleLine = true,
+        onValueChange = onPasswordChange,
+        modifier = modifier,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
@@ -79,5 +119,22 @@ fun PasswordTextField(
                 Icon(imageVector  = image, description)
             }
         }
+    )
+}
+
+/**
+ * Displays an error message in a text-field.
+ */
+@Composable
+fun TextFieldErrorMessage(
+    errorMessage: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = errorMessage,
+        style = MaterialTheme.typography.caption,
+        color = MaterialTheme.colors.error,
+        softWrap = true,
+        modifier = modifier
     )
 }

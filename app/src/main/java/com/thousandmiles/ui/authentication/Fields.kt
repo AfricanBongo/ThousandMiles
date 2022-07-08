@@ -1,16 +1,24 @@
 package com.thousandmiles.ui.authentication
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thousandmiles.ui.components.MTextField
 import com.thousandmiles.ui.components.PasswordTextField
 import com.thousandmiles.ui.theme.ThousandMilesTheme
+import com.thousandmiles.ui.theme.darkBlue
 import com.thousandmiles.ui.theme.darkerYellow
 
 /**
@@ -27,11 +35,16 @@ fun AuthenticationTextField(
     labelText: String,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
+    isError: Boolean = false,
+    onErrorShow: @Composable () -> Unit = {},
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     onValueChange: (String) -> Unit = {}
 ) {
 
     val colors = TextFieldDefaults.textFieldColors(
-        textColor = MaterialTheme.colors.onSecondary,
+        textColor = darkBlue,
         backgroundColor = MaterialTheme.colors.secondary,
         cursorColor = darkerYellow,
         focusedLabelColor = MaterialTheme.colors.secondaryVariant,
@@ -47,6 +60,8 @@ fun AuthenticationTextField(
             password = value,
             labelText = labelText,
             colors = colors,
+            isError = isError,
+            onErrorShow = onErrorShow,
             onPasswordChange = onValueChange,
             modifier = modifier
         )
@@ -57,7 +72,12 @@ fun AuthenticationTextField(
             placeholderText = "",
             colors = colors,
             onValueChange = onValueChange,
-            modifier = modifier
+            isError = isError,
+            onErrorShow = onErrorShow,
+            visualTransformation = visualTransformation,
+            keyboardActions = keyboardActions,
+            keyboardOptions = keyboardOptions,
+            modifier = modifier,
         )
 }
 
