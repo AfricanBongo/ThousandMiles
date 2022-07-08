@@ -4,57 +4,71 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.thousandmiles.ui.authentication.AuthenticationState
 
 class SignInViewModel: ViewModel() {
 
     private val accountService: AccountService = AccountServiceImpl()
 
-    var signInState by mutableStateOf(SignInUiState())
+    var signInInfo by mutableStateOf(SignInInfo())
         private set
 
-    var signInError by mutableStateOf(false)
-        private set
-
-    var signInSuccess by mutableStateOf(false)
+    var authenticationState: AuthenticationState by mutableStateOf(AuthenticationState.UserInput)
         private set
 
     var validEmailFormatError by mutableStateOf(false)
+        private set
+
+    var blankEmailError by mutableStateOf(false)
+        private set
+
+    var blankPasswordError by mutableStateOf(false)
+        private set
 
     fun onEmailChange(newValue: String) {
-        signInState = signInState.copy(email = newValue)
-        validEmailFormatError = if (signInState.email.isNotBlank()) {
-            !signInState.isCorrectEmailFormat()
+        signInInfo = signInInfo.copy(email = newValue)
+        blankEmailError = false
+        validEmailFormatError = if (signInInfo.email.isNotBlank()) {
+            !signInInfo.isCorrectEmailFormat()
         } else false
     }
 
     fun onPasswordChange(newValue: String) {
-        signInState = signInState.copy(password = newValue)
+        signInInfo = signInInfo.copy(password = newValue)
+        blankPasswordError = false
     }
 
     fun signIn() {
-        if (!validEmailFormatError) {
-            accountService.signIn(signInState.email, signInState.password) { error ->
-                if (error == null) onSignInSuccess() else onSignInError()
+        blankEmailError = signInInfo.email.isBlank()
+        blankPasswordError = signInInfo.password.isBlank()
+
+        if (!blankEmailError && !blankPasswordError) {
+            if (!validEmailFormatError) {
+                onSigningIn()
+                accountService.signIn(signInInfo.email, signInInfo.password) { error ->
+                    if (error == null) onSignInSuccess() else onSignInError(error.message ?: "Error unknown")
+                }
             }
         }
     }
 
-    private fun onSignInError() {
-        signInError = true
-        signInSuccess = false
+    private fun onSignInError(errorMessage: String) {
+        authenticationState = AuthenticationState.AuthenticationError(errorMessage)
     }
 
+    private fun onSigningIn() {
+        authenticationState = AuthenticationState.Authenticating
+    }
     fun acknowledgeSignInError() {
-        signInError = false
+        authenticationState = AuthenticationState.UserInput
     }
 
     private fun onSignInSuccess() {
-        signInSuccess = true
-        signInError = false
+        authenticationState = AuthenticationState.AuthenticationSuccess
     }
 }
 
-data class SignInUiState(
+data class SignInInfo(
     val email: String = "",
     val password: String = ""
 )
@@ -62,7 +76,7 @@ data class SignInUiState(
 /**
  * Validate that the email provided has the correct email format, e.g. 'email@yahoo.com'
  */
-private fun SignInUiState.isCorrectEmailFormat(): Boolean {
+private fun SignInInfo.isCorrectEmailFormat(): Boolean {
     // Credit to [https://regexr.com/3e48o] for Reg-Ex.
     return email.matches(Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))
 }

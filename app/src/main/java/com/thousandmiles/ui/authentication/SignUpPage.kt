@@ -1,22 +1,32 @@
 package com.thousandmiles.ui.authentication
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thousandmiles.R
+import com.thousandmiles.ui.components.AppErrorDialog
+import com.thousandmiles.ui.components.LoadingDialog
 import com.thousandmiles.ui.components.PrimaryButton
 import com.thousandmiles.ui.components.TextFieldErrorMessage
+import com.thousandmiles.ui.theme.darkBlue
+import com.thousandmiles.ui.theme.lightBlue
 import com.thousandmiles.viewmodel.auth.SignUpViewModel
 
 private const val emailF = "email"
@@ -29,6 +39,7 @@ private const val signP = "sign_phrase"
 fun SignUpPage(
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = viewModel(),
+    onSignUpSuccess: () -> Unit,
 ) {
     // Resources from res folder
     val signUpPhrase = stringResource(id = R.string.sign_up_phrase)
@@ -36,11 +47,11 @@ fun SignUpPage(
     val passwordLabel = stringResource(id = R.string.password)
     val confirmPasswordLabel = stringResource(id = R.string.confirm_password)
     val signUpButtonLabel = stringResource(id = R.string.sign_up)
-    val passwordsDontMatchLabel = stringResource(id = R.string.passwords_dont_match)
-    val invalidEmailFormatLabel = stringResource(id = R.string.invalid_email)
 
     // State that contains all values for the fields.
-    val signUpState = viewModel.signUpState
+    val signUpInfo = viewModel.signUpInfo
+
+    val authState = viewModel.authenticationState
 
     ConstraintLayout(
         constraintSet = signUpPageConstraints(),
@@ -54,12 +65,17 @@ fun SignUpPage(
 
         // Email
         AuthenticationTextField(
-            value = signUpState.email,
+            value = signUpInfo.email,
             labelText = emailLabel,
             onValueChange = viewModel::onEmailChange,
-            isError = viewModel.validEmailFormatError,
+            isError = viewModel.validEmailFormatError || viewModel.blankEmailError,
             onErrorShow = {
-                TextFieldErrorMessage(errorMessage = invalidEmailFormatLabel)
+                val errorMessage: String = if (viewModel.validEmailFormatError) {
+                    stringResource(id = R.string.invalid_email)
+                } else {
+                    stringResource(id = R.string.blank_email)
+                }
+                TextFieldErrorMessage(errorMessage = errorMessage)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -72,10 +88,19 @@ fun SignUpPage(
 
         // Password
         AuthenticationTextField(
-            value = signUpState.password,
+            value = signUpInfo.password,
             labelText = passwordLabel,
             isPassword = true,
             onValueChange = viewModel::onPasswordChange,
+            isError = viewModel.passwordTooShortError || viewModel.blankPasswordError,
+            onErrorShow = {
+                val errorMessage = if (viewModel.passwordTooShortError) {
+                    stringResource(id = R.string.password_too_short)
+                } else {
+                    stringResource(id = R.string.blank_password)
+                }
+                TextFieldErrorMessage(errorMessage = errorMessage)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .layoutId(passF)
@@ -84,16 +109,22 @@ fun SignUpPage(
 
         // Confirm password
         AuthenticationTextField(
-            value = signUpState.confirmPassword,
+            value = signUpInfo.confirmPassword,
             labelText = confirmPasswordLabel,
             isPassword = true,
             onValueChange = viewModel::onConfirmPasswordChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .layoutId(confirmPassF),
-            isError = viewModel.passwordMatchingError,
+            isError = viewModel.passwordMatchingError || viewModel.blankConfirmPasswordError,
             onErrorShow = {
-                TextFieldErrorMessage(errorMessage = passwordsDontMatchLabel)
+                val errorMessage: String =
+                    if (viewModel.passwordMatchingError) {
+                        stringResource(id = R.string.passwords_dont_match)
+                    } else {
+                        stringResource(id = R.string.blank_confirm_password)
+                    }
+                TextFieldErrorMessage(errorMessage = errorMessage)
             }
         )
 
@@ -106,6 +137,32 @@ fun SignUpPage(
                 .height(52.dp),
             onClick = viewModel::signUp
         )
+    }
+
+
+    when (authState) {
+        is AuthenticationState.AuthenticationSuccess -> onSignUpSuccess()
+        is AuthenticationState.UserInput -> { /* Do Nothing*/ }
+        is AuthenticationState.AuthenticationError -> {
+            AppErrorDialog(
+                errorTitle = stringResource(id = R.string.childish_error_title),
+                errorMessage = authState.errorMessage,
+                onDismissRequest = viewModel::acknowledgeSignInError,
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(color = MaterialTheme.colors.background)
+                    .padding(top = 32.dp)
+            )
+        }
+        else -> {
+            LoadingDialog(
+                loadingText = stringResource(id = R.string.signing_up),
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(color = MaterialTheme.colors.background)
+                    .padding(vertical = 32.dp, horizontal = 16.dp)
+            )
+        }
     }
 }
 

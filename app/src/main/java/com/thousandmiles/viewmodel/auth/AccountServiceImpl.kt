@@ -13,4 +13,12 @@ class AccountServiceImpl: AccountService {
         Firebase.auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { onResult(it.exception) }
     }
+
+    override fun forgotPassword(
+        email: String,
+        onResult: (Throwable?) -> Unit
+    ) {
+        Firebase.auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { onResult(it.exception) }
+    }
 }

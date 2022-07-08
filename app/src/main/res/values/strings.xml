@@ -15,7 +15,18 @@
     <string name="forgot_pass">Forgot your password</string>
     <string name="passwords_dont_match">Your passwords do not match</string>
     <string name="invalid_email">Invalid email address</string>
+    <string name="password_too_short">Your password should be at least 6 characters long</string>
+    <string name="blank_email">Please provide your email address</string>
+    <string name="blank_password">Please provide your password</string>
+    <string name="blank_confirm_password">Please confirm your password</string>
+    <string name="signing_in">Signing you into your account</string>
+    <string name="signing_up">We are signing you right up!</string>
+    <string name="close">Close</string>
+
+    <!-- Global -->
+    <string name="childish_error_title">Uh oh something\'s wrong</string>
 
     <!-- Content descriptions -->
     <string name="foot_logo_descr">Logo of a one foot and 3 zeroes to make the number \'1000\'.</string>
+    <string name="error_descr">Error icon</string>
 </resources>

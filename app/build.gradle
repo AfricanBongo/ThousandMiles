@@ -48,6 +48,7 @@ android {
 
 dependencies {
     def lifecycle_version = "2.6.0-alpha01"
+    def accompanist_version = "0.24.13-rc"
 
     // Firebase Authentication Library
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
@@ -59,8 +60,11 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
     // Accompanist view-pager library
-    implementation 'com.google.accompanist:accompanist-pager:0.24.13-rc'
-    implementation 'com.google.accompanist:accompanist-pager-indicators:0.24.13-rc'
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
+
+    // Animated navigation in Compose.
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

@@ -37,6 +37,7 @@ const val ftLogo = "foot"
 @Composable
 fun AuthenticationScreen(
     modifier: Modifier = Modifier,
+    onAuthenticated: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -100,7 +101,7 @@ fun AuthenticationScreen(
                 divider = {},
                 modifier = Modifier
                     .weight(1f)
-                    .requiredWidth(200.dp)
+                    .width(240.dp)
                     .padding(start = 16.dp),
                 indicator = { tabPositions ->
                     TabRowDefaults.Indicator(
@@ -143,9 +144,9 @@ fun AuthenticationScreen(
                     .background(color = lightBlue)
                     .padding(horizontal = 16.dp)
                 if (page == 0) {
-                    SignInPage(modifier = pageModifier)
+                    SignInPage(modifier = pageModifier, onSignInSuccess = onAuthenticated)
                 } else {
-                    SignUpPage(modifier = pageModifier)
+                    SignUpPage(modifier = pageModifier, onSignUpSuccess = onAuthenticated)
                 }
             }
         }
@@ -176,13 +177,5 @@ private fun taglineConstraints(): ConstraintSet {
         constrain(authTagline3) {
             top.linkTo(footLogo.bottom, 12.dp)
         }
-    }
-}
-
-@DevicePreview
-@Composable
-fun AuthenticationScreenPreview() {
-    ThousandMilesTheme {
-        AuthenticationScreen(modifier = Modifier.fillMaxSize())
     }
 }

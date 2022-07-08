@@ -4,65 +4,94 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.thousandmiles.ui.authentication.AuthenticationState
 
 class SignUpViewModel: ViewModel() {
     private val accountService: AccountService = AccountServiceImpl()
 
-    var signUpState by mutableStateOf(SignUpUiState())
-
-    var signUpError by mutableStateOf(false)
+    var signUpInfo by mutableStateOf(SignUpInfo())
         private set
 
-    var signUpSuccess by mutableStateOf(false)
+    var authenticationState: AuthenticationState by mutableStateOf(AuthenticationState.UserInput)
         private set
 
     // Input field errors
     var passwordMatchingError by mutableStateOf(false)
+        private set
+    var passwordTooShortError by mutableStateOf(false)
+        private set
     var validEmailFormatError by mutableStateOf(false)
+        private set
+    var blankEmailError by mutableStateOf(false)
+        private set
+    var blankPasswordError by mutableStateOf(false)
+        private set
+    var blankConfirmPasswordError by mutableStateOf(false)
+        private set
 
     fun onEmailChange(newValue: String) {
-        signUpState = signUpState.copy(email = newValue)
-        validEmailFormatError = if (signUpState.email.isNotBlank()) {
-            !signUpState.isCorrectEmailFormat()
+        signUpInfo = signUpInfo.copy(email = newValue)
+        blankEmailError = false
+        validEmailFormatError = if (signUpInfo.email.isNotBlank()) {
+            !signUpInfo.isCorrectEmailFormat()
         } else false
     }
 
     fun onPasswordChange(newValue: String) {
-        signUpState = signUpState.copy(password = newValue)
+        signUpInfo = signUpInfo.copy(password = newValue)
+        blankPasswordError = false
+        passwordTooShortError = if (signUpInfo.password.isNotBlank()) {
+            signUpInfo.isPasswordTooShort()
+        } else false
     }
 
     fun onConfirmPasswordChange(newValue: String) {
-        signUpState = signUpState.copy(confirmPassword = newValue)
+        signUpInfo = signUpInfo.copy(confirmPassword = newValue)
+        blankConfirmPasswordError = false
         passwordMatchingError =
-            if (signUpState.password.isNotBlank() && signUpState.confirmPassword.isNotBlank()) {
-                !signUpState.passwordsMatch()
+            if (signUpInfo.password.isNotBlank() && signUpInfo.confirmPassword.isNotBlank()) {
+                !signUpInfo.passwordsMatch()
             } else false
     }
 
     fun signUp() {
-        if (!passwordMatchingError && !validEmailFormatError) {
-            accountService.signUp(signUpState.email, signUpState.password) { error ->
-                if (error == null) onSignInSuccess() else onSignInError()
+        blankEmailError = signUpInfo.email.isBlank()
+        blankPasswordError = signUpInfo.password.isBlank()
+        blankConfirmPasswordError = signUpInfo.confirmPassword.isBlank()
+
+        if (!blankEmailError && !blankPasswordError && !blankConfirmPasswordError) {
+            if (!passwordMatchingError && !validEmailFormatError && !passwordTooShortError) {
+                onSigningUp()
+
+                accountService.signUp(signUpInfo.email, signUpInfo.password) { error ->
+                    if (error == null) {
+                        onSignUpSuccess()
+                    } else {
+                        onSignUpError(error.message ?: "Error unknown")
+                    }
+                }
             }
         }
     }
 
-    private fun onSignInError() {
-        signUpSuccess = false
-        signUpError = true
+    private fun onSignUpError(errorMessage: String) {
+        authenticationState = AuthenticationState.AuthenticationError(errorMessage)
     }
 
     fun acknowledgeSignInError() {
-        signUpError = false
+        authenticationState = AuthenticationState.UserInput
     }
 
-    private fun onSignInSuccess() {
-        signUpError = false
-        signUpSuccess = true
+    private fun onSigningUp() {
+        authenticationState = AuthenticationState.Authenticating
+    }
+
+    private fun onSignUpSuccess() {
+        authenticationState = AuthenticationState.AuthenticationSuccess
     }
 }
 
-data class SignUpUiState(
+data class SignUpInfo(
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = ""
@@ -71,14 +100,21 @@ data class SignUpUiState(
 /**
  * Whether the passwords in this state are the same.
  */
-private fun SignUpUiState.passwordsMatch(): Boolean {
+private fun SignUpInfo.passwordsMatch(): Boolean {
     return password.compareTo(confirmPassword) == 0
 }
 
 /**
- * Validate that the email provided has the correct email format, e.g. 'email@yahoo.com'
+ * Verify that the password isn't too short.
  */
-private fun SignUpUiState.isCorrectEmailFormat(): Boolean {
+private fun SignUpInfo.isPasswordTooShort(): Boolean {
+    return password.length < 6
+}
+
+/**
+ * Verify that the email provided has the correct email format, e.g. 'email@yahoo.com'
+ */
+private fun SignUpInfo.isCorrectEmailFormat(): Boolean {
     // Credit to [https://regexr.com/3e48o] for Reg-Ex.
     return email.matches(Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))
 }
