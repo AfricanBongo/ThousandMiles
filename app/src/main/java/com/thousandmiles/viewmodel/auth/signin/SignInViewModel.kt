@@ -1,14 +1,16 @@
-package com.thousandmiles.viewmodel.auth
+package com.thousandmiles.viewmodel.auth.signin
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.thousandmiles.ui.authentication.AuthenticationState
+import com.thousandmiles.service.auth.AuthService
+import com.thousandmiles.service.auth.SignInService
+import com.thousandmiles.ui.auth.AuthenticationState
 
 class SignInViewModel: ViewModel() {
 
-    private val accountService: AccountService = AccountServiceImpl()
+    private val signInService: SignInService = AuthService
 
     var signInInfo by mutableStateOf(SignInInfo())
         private set
@@ -45,7 +47,7 @@ class SignInViewModel: ViewModel() {
         if (!blankEmailError && !blankPasswordError) {
             if (!validEmailFormatError) {
                 onSigningIn()
-                accountService.signIn(signInInfo.email, signInInfo.password) { error ->
+                signInService.signIn(signInInfo.email, signInInfo.password) { error ->
                     if (error == null) onSignInSuccess() else onSignInError(error.message ?: "Error unknown")
                 }
             }
@@ -66,17 +68,4 @@ class SignInViewModel: ViewModel() {
     private fun onSignInSuccess() {
         authenticationState = AuthenticationState.AuthenticationSuccess
     }
-}
-
-data class SignInInfo(
-    val email: String = "",
-    val password: String = ""
-)
-
-/**
- * Validate that the email provided has the correct email format, e.g. 'email@yahoo.com'
- */
-private fun SignInInfo.isCorrectEmailFormat(): Boolean {
-    // Credit to [https://regexr.com/3e48o] for Reg-Ex.
-    return email.matches(Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))
 }

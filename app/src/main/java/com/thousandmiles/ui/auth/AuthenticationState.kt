@@ -1,9 +1,12 @@
-package com.thousandmiles.ui.authentication
+package com.thousandmiles.ui.auth
 
 /**
  * States during the user authentication stage.
  */
 sealed class AuthenticationState {
+
+    object NotAuthenticated: AuthenticationState()
+
     /**
      * User is still inputting information into the fields.
      */

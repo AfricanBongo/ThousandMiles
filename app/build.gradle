@@ -49,9 +49,17 @@ android {
 dependencies {
     def lifecycle_version = "2.6.0-alpha01"
     def accompanist_version = "0.24.13-rc"
+    def coil_version = "2.1.0"
 
-    // Firebase Authentication Library
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
+    // Coil image loading library
+    implementation "io.coil-kt:coil:$coil_version"
+    implementation "io.coil-kt:coil-compose:$coil_version"
+
+    // Firebase BOM
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
     // Constraint layout
     implementation 'androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha03'

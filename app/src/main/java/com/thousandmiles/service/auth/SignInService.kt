@@ -1,7 +1,6 @@
-package com.thousandmiles.viewmodel.auth
+package com.thousandmiles.service.auth
 
-interface AccountService {
+interface SignInService {
     fun signIn(email: String, password: String, onResult: (Throwable?) -> Unit)
-    fun signUp(email: String, password: String, onResult: (Throwable?) -> Unit)
     fun forgotPassword(email: String, onResult: (Throwable?) -> Unit)
 }

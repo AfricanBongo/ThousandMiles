@@ -1,73 +1,66 @@
-package com.thousandmiles.ui.authentication
+package com.thousandmiles.ui.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import com.thousandmiles.R
-import com.thousandmiles.ui.components.PrimaryButton
-import com.thousandmiles.viewmodel.auth.SignInViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.thousandmiles.R
 import com.thousandmiles.ui.components.AppErrorDialog
 import com.thousandmiles.ui.components.LoadingDialog
+import com.thousandmiles.ui.components.PrimaryButton
 import com.thousandmiles.ui.components.TextFieldErrorMessage
-import com.thousandmiles.ui.theme.darkBlue
+import com.thousandmiles.viewmodel.auth.signup.SignUpViewModel
 
-private const val emailF = "username"
+private const val emailF = "email"
 private const val passF = "password"
+private const val confirmPassF = "confirm"
 private const val signB = "sign_btn"
 private const val signP = "sign_phrase"
-private const val forgot = "forgot"
 
 @Composable
-fun SignInPage(
+fun SignUpPage(
     modifier: Modifier = Modifier,
-    viewModel: SignInViewModel = viewModel(),
-    onSignInSuccess: () -> Unit,
+    viewModel: SignUpViewModel = viewModel(),
+    onSignUpSuccess: () -> Unit,
 ) {
     // Resources from res folder
-    val signInPhrase = stringResource(id = R.string.sign_in_phrase)
+    val signUpPhrase = stringResource(id = R.string.sign_up_phrase)
     val emailLabel = stringResource(id = R.string.email)
     val passwordLabel = stringResource(id = R.string.password)
-    val forgotPasswordLabel = stringResource(id = R.string.forgot_pass)
-    val signInButtonLabel = stringResource(id = R.string.sign_in)
+    val confirmPasswordLabel = stringResource(id = R.string.confirm_password)
+    val signUpButtonLabel = stringResource(id = R.string.sign_up)
 
-    val signInInfo = viewModel.signInInfo
+    // State that contains all values for the fields.
+    val signUpInfo = viewModel.signUpInfo
+
     val authState = viewModel.authenticationState
 
     ConstraintLayout(
-        constraintSet = authBoxConstraints(),
+        constraintSet = signUpPageConstraints(),
         modifier = modifier
     ) {
         Text(
-            text = signInPhrase,
+            text = signUpPhrase,
             style = MaterialTheme.typography.h4,
             modifier = Modifier.layoutId(signP)
         )
 
         // Email
         AuthenticationTextField(
-            value = signInInfo.email,
+            value = signUpInfo.email,
             labelText = emailLabel,
             onValueChange = viewModel::onEmailChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .layoutId(emailF),
             isError = viewModel.validEmailFormatError || viewModel.blankEmailError,
             onErrorShow = {
                 val errorMessage: String = if (viewModel.validEmailFormatError) {
@@ -76,50 +69,72 @@ fun SignInPage(
                     stringResource(id = R.string.blank_email)
                 }
                 TextFieldErrorMessage(errorMessage = errorMessage)
-            }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .layoutId(emailF)
+
         )
 
         // Password
         AuthenticationTextField(
-            value = signInInfo.password,
+            value = signUpInfo.password,
             labelText = passwordLabel,
             isPassword = true,
             onValueChange = viewModel::onPasswordChange,
-            isError = viewModel.blankPasswordError,
+            isError = viewModel.passwordTooShortError || viewModel.blankPasswordError,
             onErrorShow = {
-                TextFieldErrorMessage(
-                    errorMessage = stringResource(id = R.string.blank_password)
-                )
+                val errorMessage = if (viewModel.passwordTooShortError) {
+                    stringResource(id = R.string.password_too_short)
+                } else {
+                    stringResource(id = R.string.blank_password)
+                }
+                TextFieldErrorMessage(errorMessage = errorMessage)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .layoutId(passF)
+
         )
 
-        // Forgot your password
-        ClickableText(
-            text = AnnotatedString(forgotPasswordLabel),
-            onClick = {},
-            style = MaterialTheme.typography.caption.copy(
-                color = MaterialTheme.colors.secondaryVariant,
-                textDecoration = TextDecoration.Underline
-            ),
-            modifier = Modifier.layoutId(forgot)
+        // Confirm password
+        AuthenticationTextField(
+            value = signUpInfo.confirmPassword,
+            labelText = confirmPasswordLabel,
+            isPassword = true,
+            onValueChange = viewModel::onConfirmPasswordChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .layoutId(confirmPassF),
+            isError = viewModel.passwordMatchingError || viewModel.blankConfirmPasswordError,
+            onErrorShow = {
+                val errorMessage: String =
+                    if (viewModel.passwordMatchingError) {
+                        stringResource(id = R.string.passwords_dont_match)
+                    } else {
+                        stringResource(id = R.string.blank_confirm_password)
+                    }
+                TextFieldErrorMessage(errorMessage = errorMessage)
+            }
         )
 
-        // Sign in button
+        // Sign up button
         PrimaryButton(
-            text = signInButtonLabel,
+            text = signUpButtonLabel,
             modifier = Modifier
                 .layoutId(signB)
                 .fillMaxWidth()
                 .height(52.dp),
-            onClick = viewModel::signIn
+            onClick = viewModel::signUp
         )
     }
 
+
     when (authState) {
-        is AuthenticationState.AuthenticationSuccess -> onSignInSuccess()
+        is AuthenticationState.AuthenticationSuccess -> onSignUpSuccess()
         is AuthenticationState.UserInput -> { /* Do Nothing*/ }
         is AuthenticationState.AuthenticationError -> {
             AppErrorDialog(
@@ -134,7 +149,7 @@ fun SignInPage(
         }
         else -> {
             LoadingDialog(
-                loadingText = stringResource(id = R.string.signing_in),
+                loadingText = stringResource(id = R.string.signing_up),
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.medium)
                     .background(color = MaterialTheme.colors.background)
@@ -144,13 +159,13 @@ fun SignInPage(
     }
 }
 
-private fun authBoxConstraints(): ConstraintSet {
+private fun signUpPageConstraints(): ConstraintSet {
     return ConstraintSet {
         val signPhrase = createRefFor(signP)
         val signButton = createRefFor(signB)
         val emailField = createRefFor(emailF)
         val passwordField = createRefFor(passF)
-        val forgotText = createRefFor(forgot)
+        val confirmPasswordField = createRefFor(confirmPassF)
 
         constrain(signPhrase) {
             top.linkTo(parent.top, 48.dp)
@@ -167,13 +182,13 @@ private fun authBoxConstraints(): ConstraintSet {
             start.linkTo(parent.start)
         }
 
-        constrain(forgotText) {
+        constrain(confirmPasswordField) {
             top.linkTo(passwordField.bottom, 12.dp)
-            end.linkTo(parent.end)
+            start.linkTo(parent.start)
         }
 
         constrain(signButton) {
-            top.linkTo(forgotText.bottom, 52.dp)
+            top.linkTo(confirmPasswordField.bottom, 52.dp)
         }
     }
 }

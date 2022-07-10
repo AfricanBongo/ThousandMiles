@@ -1,13 +1,16 @@
-package com.thousandmiles.viewmodel.auth
+package com.thousandmiles.viewmodel.auth.signup
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.thousandmiles.ui.authentication.AuthenticationState
+import com.thousandmiles.service.auth.AuthService
+import com.thousandmiles.service.auth.SignUpService
+import com.thousandmiles.ui.auth.AuthenticationState
 
 class SignUpViewModel: ViewModel() {
-    private val accountService: AccountService = AccountServiceImpl()
+
+    private val signUpService: SignUpService = AuthService
 
     var signUpInfo by mutableStateOf(SignUpInfo())
         private set
@@ -63,7 +66,7 @@ class SignUpViewModel: ViewModel() {
             if (!passwordMatchingError && !validEmailFormatError && !passwordTooShortError) {
                 onSigningUp()
 
-                accountService.signUp(signUpInfo.email, signUpInfo.password) { error ->
+                signUpService.signUp(signUpInfo.email, signUpInfo.password) { error ->
                     if (error == null) {
                         onSignUpSuccess()
                     } else {
@@ -89,32 +92,4 @@ class SignUpViewModel: ViewModel() {
     private fun onSignUpSuccess() {
         authenticationState = AuthenticationState.AuthenticationSuccess
     }
-}
-
-data class SignUpInfo(
-    val email: String = "",
-    val password: String = "",
-    val confirmPassword: String = ""
-)
-
-/**
- * Whether the passwords in this state are the same.
- */
-private fun SignUpInfo.passwordsMatch(): Boolean {
-    return password.compareTo(confirmPassword) == 0
-}
-
-/**
- * Verify that the password isn't too short.
- */
-private fun SignUpInfo.isPasswordTooShort(): Boolean {
-    return password.length < 6
-}
-
-/**
- * Verify that the email provided has the correct email format, e.g. 'email@yahoo.com'
- */
-private fun SignUpInfo.isCorrectEmailFormat(): Boolean {
-    // Credit to [https://regexr.com/3e48o] for Reg-Ex.
-    return email.matches(Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))
 }

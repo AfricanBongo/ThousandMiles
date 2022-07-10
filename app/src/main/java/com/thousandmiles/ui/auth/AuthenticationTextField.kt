@@ -1,4 +1,4 @@
-package com.thousandmiles.ui.authentication
+package com.thousandmiles.ui.auth
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions

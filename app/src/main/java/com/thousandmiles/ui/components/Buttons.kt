@@ -28,7 +28,8 @@ fun PrimaryButton(
             backgroundColor = MaterialTheme.colors.primaryVariant
         ),
         onClick = onClick,
-        modifier = modifier.clip(MaterialTheme.shapes.medium)
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier
     ) {
         Text(text = text, style = MaterialTheme.typography.body1)
     }

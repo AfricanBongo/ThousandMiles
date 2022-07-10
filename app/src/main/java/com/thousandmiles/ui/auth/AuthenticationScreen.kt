@@ -1,4 +1,4 @@
-package com.thousandmiles.ui.authentication
+package com.thousandmiles.ui.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,8 +21,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.thousandmiles.R
-import com.thousandmiles.ui.components.DevicePreview
-import com.thousandmiles.ui.theme.ThousandMilesTheme
 import com.thousandmiles.ui.theme.darkBlue
 import com.thousandmiles.ui.theme.lightBlue
 import kotlinx.coroutines.launch

@@ -6,8 +6,12 @@
         <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/java/com/thousandmiles/ui/authentication/AuthenticationScreen.kt" value="0.264" />
         <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/java/com/thousandmiles/ui/authentication/AuthenticationTextField.kt" value="0.2175925925925926" />
         <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/java/com/thousandmiles/ui/authentication/Fields.kt" value="0.536" />
+        <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/java/com/thousandmiles/ui/onboarding/UserDetailsPage.kt" value="0.4" />
+        <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/java/com/thousandmiles/viewmodel/onboarding/WelcomePage.kt" value="0.264" />
         <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/res/drawable/foot_logo.xml" value="0.1105" />
         <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/res/drawable/ic_error.xml" value="0.1" />
+        <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/res/drawable/ic_welcome.xml" value="0.1" />
+        <entry key="..\:/Users/tilor/AndroidStudioProjects/Projects/Android/ThousandMiles/app/src/main/res/drawable/profile_placeholder.xml" value="0.102" />
       </map>
     </option>
   </component>
