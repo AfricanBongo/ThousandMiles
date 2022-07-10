@@ -23,10 +23,32 @@
     <string name="signing_up">We are signing you right up!</string>
     <string name="close">Close</string>
 
+    <!-- Onboarding -->
+    <string name="welcome">You’re now part of the eco-warrior clan / fitness club / good citizens league / money-savers gang.
+        \n\n
+        Phew! That’s a lot of slashes.
+        \n\n
+        Now, let’s start your discount journey!
+    </string>
+    <string name="start">Let\'s start</string>
+    <string name="firstName">First name</string>
+    <string name="lastName">Last name</string>
+    <string name="national_ID">National ID number</string>
+    <string name="mobility">Mobility disabled</string>
+    <string name="dob">Date of Birth</string>
+    <string name="brand">Brand name</string>
+    <string name="model">Model name</string>
+    <string name="type">Vehicle Type</string>
+    <string name="price">Price range</string>
+    <string name="personal_details_title">Some personal details first</string>
+    <string name="personal_details_subtitle">Don\'t worry we\'ll keep them safe</string>
+    <string name="vehicle_details_title">And your vehicle details</string>
+    <string name="vehicle_details_subtitle">So that we can we calculate your discounts in respect to that awesome ride you drive!</string>
     <!-- Global -->
     <string name="childish_error_title">Uh oh something\'s wrong</string>
 
     <!-- Content descriptions -->
     <string name="foot_logo_descr">Logo of a one foot and 3 zeroes to make the number \'1000\'.</string>
     <string name="error_descr">Error icon</string>
+    <string name="welcome_descr">Welcome banner with silly shapes and confetti</string>
 </resources>

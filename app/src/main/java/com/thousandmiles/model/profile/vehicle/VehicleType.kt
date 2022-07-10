@@ -5,5 +5,5 @@ package com.thousandmiles.model.profile.vehicle
  * E.g. Sedan
  */
 enum class VehicleType {
-    Micro, Sedan, CUV, SUV, Hatchback, Roadster, Pickup, Van, Coupe, Minivan, Truck
+    Micro, Sedan, CUV, SUV, Hatchback, Roadster, Pickup, Van, Coupe, Minivan, Truck, Blank
 }
