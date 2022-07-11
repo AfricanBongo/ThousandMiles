@@ -16,6 +16,7 @@ import com.thousandmiles.ui.components.PasswordTextField
 import com.thousandmiles.ui.theme.ThousandMilesTheme
 import com.thousandmiles.ui.theme.darkBlue
 import com.thousandmiles.ui.theme.darkerYellow
+import com.thousandmiles.ui.theme.lighterBlue
 
 /**
  * A text-field used to capture data needed for authentication.
@@ -26,28 +27,34 @@ import com.thousandmiles.ui.theme.darkerYellow
  * - [value] becomes password
  */
 @Composable
-fun AuthenticationTextField(
+fun TextFieldWithErrorOption(
     value: String,
     labelText: String,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
+    enabled: Boolean = true,
     isError: Boolean = false,
-    onErrorShow: @Composable () -> Unit = {},
+    onError: @Composable () -> Unit = {},
+    lighterBackground: Boolean = false,
+    trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    onValueChange: (String) -> Unit = {}
+    onValueChange: (String) -> Unit = {},
 ) {
 
     // Colors used to style the text fields.
-    val colors = TextFieldDefaults.textFieldColors(
+    val textFieldColors = TextFieldDefaults.textFieldColors(
         textColor = darkBlue,
-        backgroundColor = MaterialTheme.colors.secondary,
+        backgroundColor = if (lighterBackground) lighterBlue else MaterialTheme.colors.secondary,
         cursorColor = darkerYellow,
         focusedLabelColor = MaterialTheme.colors.secondaryVariant,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
-        disabledIndicatorColor = Color.Transparent
+        disabledIndicatorColor = Color.Transparent,
+        disabledTextColor = darkBlue,
+        disabledLabelColor = MaterialTheme.colors.secondaryVariant,
+        unfocusedLabelColor = MaterialTheme.colors.secondaryVariant,
     )
 
     // If the text-field needed is to be a password related one then use PasswordTextField.
@@ -56,9 +63,9 @@ fun AuthenticationTextField(
         PasswordTextField(
             password = value,
             labelText = labelText,
-            colors = colors,
+            colors = textFieldColors,
             isError = isError,
-            onErrorShow = onErrorShow,
+            onErrorShow = onError,
             onPasswordChange = onValueChange,
             modifier = modifier
         )
@@ -67,10 +74,12 @@ fun AuthenticationTextField(
             value = value,
             labelText = labelText,
             placeholderText = "",
-            colors = colors,
+            colors = textFieldColors,
             onValueChange = onValueChange,
+            enabled = enabled,
             isError = isError,
-            onErrorShow = onErrorShow,
+            onErrorShow = onError,
+            trailingIcon =  trailingIcon,
             visualTransformation = visualTransformation,
             keyboardActions = keyboardActions,
             keyboardOptions = keyboardOptions,
@@ -82,7 +91,7 @@ fun AuthenticationTextField(
 @Composable
 fun AuthenticationTextFieldPreview() {
     ThousandMilesTheme {
-        AuthenticationTextField(
+        TextFieldWithErrorOption(
             value = "",
             labelText = "Text",
             modifier = Modifier.height(80.dp)

@@ -16,6 +16,11 @@ import androidx.compose.ui.window.DialogProperties
 import com.thousandmiles.R
 import com.thousandmiles.ui.theme.darkBlue
 import com.thousandmiles.ui.theme.lightBlue
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
 
 @Composable
 fun LoadingDialog(
@@ -121,4 +126,62 @@ fun AppErrorDialog(
             }
         }
     }
+}
+
+@Composable
+fun DatePickerDialog(
+    initialDate: LocalDate?,
+    showDialog: Boolean,
+    title: String,
+    dismissRequest: () -> Unit,
+    onDateChange: (LocalDate) -> Unit
+) {
+    val dialogState = rememberMaterialDialogState()
+
+    MaterialDialog(
+        dialogState = dialogState,
+        properties = DialogProperties(),
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = MaterialTheme.colors.background,
+        buttons = {
+            positiveButton(
+                text = "Set",
+                textStyle = MaterialTheme.typography.body1.copy(
+                    color = darkBlue
+                )
+            ) {
+                dismissRequest()
+            }
+            negativeButton(
+                "Cancel",
+                textStyle = MaterialTheme.typography.body1.copy(
+                    color = MaterialTheme.colors.secondaryVariant
+                )
+            ) {
+                dismissRequest()
+            }
+        }
+    ) {
+        val sixteenYearsAgo: LocalDate = LocalDate
+            .now()
+            .minusYears(16L)
+
+        datepicker(
+            initialDate ?: sixteenYearsAgo,
+            title,
+            allowedDateValidator = { date ->
+                date.isBefore(sixteenYearsAgo)
+            },
+            colors = DatePickerDefaults.colors(
+                headerBackgroundColor = MaterialTheme.colors.secondary,
+                headerTextColor = darkBlue,
+                calendarHeaderTextColor = darkBlue,
+                dateActiveBackgroundColor = MaterialTheme.colors.primaryVariant,
+                dateActiveTextColor = MaterialTheme.colors.onPrimary
+            ),
+            onDateChange = onDateChange
+        )
+    }
+
+    if (showDialog) dialogState.show() else dialogState.hide()
 }

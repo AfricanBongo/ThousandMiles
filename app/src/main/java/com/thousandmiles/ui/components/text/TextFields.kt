@@ -11,8 +11,6 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -33,6 +31,7 @@ fun MTextField(
     placeholderText: String,
     colors: TextFieldColors,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     isError: Boolean = false,
     onErrorShow: @Composable () -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -57,6 +56,7 @@ fun MTextField(
             value = value,
             onValueChange = onValueChange,
             isError = isError,
+            enabled = enabled,
             colors = colors,
             shape = MaterialTheme.shapes.medium,
             textStyle = MaterialTheme.typography.body1,
