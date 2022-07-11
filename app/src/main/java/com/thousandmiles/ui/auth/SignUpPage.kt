@@ -57,12 +57,12 @@ fun SignUpPage(
         )
 
         // Email
-        AuthenticationTextField(
+        TextFieldWithErrorOption(
             value = signUpInfo.email,
             labelText = emailLabel,
             onValueChange = viewModel::onEmailChange,
             isError = viewModel.validEmailFormatError || viewModel.blankEmailError,
-            onErrorShow = {
+            onError = {
                 val errorMessage: String = if (viewModel.validEmailFormatError) {
                     stringResource(id = R.string.invalid_email)
                 } else {
@@ -80,13 +80,13 @@ fun SignUpPage(
         )
 
         // Password
-        AuthenticationTextField(
+        TextFieldWithErrorOption(
             value = signUpInfo.password,
             labelText = passwordLabel,
             isPassword = true,
             onValueChange = viewModel::onPasswordChange,
             isError = viewModel.passwordTooShortError || viewModel.blankPasswordError,
-            onErrorShow = {
+            onError = {
                 val errorMessage = if (viewModel.passwordTooShortError) {
                     stringResource(id = R.string.password_too_short)
                 } else {
@@ -101,7 +101,7 @@ fun SignUpPage(
         )
 
         // Confirm password
-        AuthenticationTextField(
+        TextFieldWithErrorOption(
             value = signUpInfo.confirmPassword,
             labelText = confirmPasswordLabel,
             isPassword = true,
@@ -110,7 +110,7 @@ fun SignUpPage(
                 .fillMaxWidth()
                 .layoutId(confirmPassF),
             isError = viewModel.passwordMatchingError || viewModel.blankConfirmPasswordError,
-            onErrorShow = {
+            onError = {
                 val errorMessage: String =
                     if (viewModel.passwordMatchingError) {
                         stringResource(id = R.string.passwords_dont_match)

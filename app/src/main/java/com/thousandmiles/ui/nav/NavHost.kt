@@ -2,20 +2,23 @@ package com.thousandmiles.ui.nav
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.thousandmiles.service.auth.AuthService
 import com.thousandmiles.ui.auth.AuthenticationScreen
 import com.thousandmiles.ui.overview.OverviewScreen
-import com.thousandmiles.viewmodel.onboarding.OnboardingNavigationScreen
+import com.thousandmiles.ui.onboarding.OnboardingNavigationScreen
+import com.thousandmiles.ui.onboarding.WelcomePage
 
 /**
  * A navigation destination within the app.
  */
 enum class NavScreen {
-    Auth, Overview, Onboarding
+    Auth, Overview, Onboarding, Welcome
 }
 
 /**
@@ -40,6 +43,41 @@ fun MNavHost(navController: NavHostController) {
         }
 
         composable(
+            route = NavScreen.Onboarding.name,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    NavScreen.Auth.name ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up)
+                    else -> null
+                }
+            },
+        ) {
+            OnboardingNavigationScreen(
+                onFinishedOnboarding = {
+                    navController.navigate(NavScreen.Welcome.name)
+                },
+                onShouldNotOnboard = {
+                    navController.navigate(NavScreen.Overview.name)
+                }
+            )
+        }
+
+        composable(
+            route = NavScreen.Welcome.name,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    NavScreen.Onboarding.name ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up)
+                    else -> null
+                }
+            }
+        ) {
+            WelcomePage(Modifier.fillMaxSize()) {
+                navController.navigate(NavScreen.Overview.name)
+            }
+        }
+
+        composable(
             route = NavScreen.Overview.name,
             enterTransition = {
                 when (initialState.destination.route) {
@@ -52,19 +90,5 @@ fun MNavHost(navController: NavHostController) {
             OverviewScreen()
         }
 
-        composable(
-            route = NavScreen.Onboarding.name,
-            enterTransition = {
-                when (initialState.destination.route) {
-                    NavScreen.Auth.name ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up)
-                    else -> null
-                }
-            },
-        ) {
-            OnboardingNavigationScreen {
-                navController.navigate(NavScreen.Overview.name)
-            }
-        }
     }
 }

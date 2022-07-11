@@ -44,12 +44,21 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.thousandmiles'
 }
 
 dependencies {
     def lifecycle_version = "2.6.0-alpha01"
     def accompanist_version = "0.24.13-rc"
     def coil_version = "2.1.0"
+    def compose_material_dialogs_version = "0.8.1-rc"
+
+    // Health Connect API
+    implementation 'androidx.health:health-connect-client:1.0.0-alpha02'
+
+    // Date-time picker library
+    implementation "io.github.vanpra.compose-material-dialogs:core:${compose_material_dialogs_version}"
+    implementation "io.github.vanpra.compose-material-dialogs:datetime:${compose_material_dialogs_version}"
 
     // Coil image loading library
     implementation "io.coil-kt:coil:$coil_version"

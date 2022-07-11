@@ -40,7 +40,7 @@ object UserProfileService: UserProfileReadService, UserProfileWriteService {
 
             // Attempt to upload user profile image to the cloud.
             val imageStorageReference = storageReference.child(uid)
-            imageStorageReference.putFile(Uri.parse(profile.profilePhotoUri)).addOnFailureListener(onSaveUnsuccessful)
+            imageStorageReference.putFile(Uri.parse(profile.user.profilePhotoUri)).addOnFailureListener(onSaveUnsuccessful)
         } else {
             onSaveUnsuccessful(Throwable(uidErrorMessage))
         }

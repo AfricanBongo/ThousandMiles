@@ -1,4 +1,4 @@
-package com.thousandmiles.viewmodel.onboarding
+package com.thousandmiles.ui.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -53,6 +53,7 @@ fun WelcomePage(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
+            onClick = onContinue
         )
     }
 }

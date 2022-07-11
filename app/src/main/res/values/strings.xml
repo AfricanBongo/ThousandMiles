@@ -10,8 +10,6 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="sign_in">Sign in</string>
-    <string name="sign_up">Sign up</string>
     <string name="forgot_pass">Forgot your password</string>
     <string name="passwords_dont_match">Your passwords do not match</string>
     <string name="invalid_email">Invalid email address</string>
@@ -21,7 +19,7 @@
     <string name="blank_confirm_password">Please confirm your password</string>
     <string name="signing_in">Signing you into your account</string>
     <string name="signing_up">We are signing you right up!</string>
-    <string name="close">Close</string>
+
 
     <!-- Onboarding -->
     <string name="welcome">You’re now part of the eco-warrior clan / fitness club / good citizens league / money-savers gang.
@@ -34,8 +32,9 @@
     <string name="firstName">First name</string>
     <string name="lastName">Last name</string>
     <string name="national_ID">National ID number</string>
-    <string name="mobility">Mobility disabled</string>
+    <string name="mobility">Impaired mobility, i.e. disability</string>
     <string name="dob">Date of Birth</string>
+    <string name="dob_title">Select your date of birth</string>
     <string name="brand">Brand name</string>
     <string name="model">Model name</string>
     <string name="type">Vehicle Type</string>
@@ -44,6 +43,25 @@
     <string name="personal_details_subtitle">Don\'t worry we\'ll keep them safe</string>
     <string name="vehicle_details_title">And your vehicle details</string>
     <string name="vehicle_details_subtitle">So that we can we calculate your discounts in respect to that awesome ride you drive!</string>
+    <string name="saving_profile">Uploading your profile…</string>
+    <string name="firstname_blank">Please provide your first name</string>
+    <string name="lastname_blank">Please provide your last name</string>
+    <string name="dob_blank">Please provide your date of birth</string>
+    <string name="nationalID_blank">Please provide your national ID number</string>
+    <string name="invalid_nationalID">Your national ID number is invalid, good example: "26–5846845B-26"</string>
+    <string name="brand_blank">Please provide the brand name of your vehicle</string>
+    <string name="model_blank">Please provide the model name of your vehicle</string>
+    <string name="type_blank">Please provide your vehicle\'s type</string>
+    <string name="pricing_blank">Please provide the pricing of your vehicle</string>
+
+    <!-- Buttons -->
+    <string name="next_button">Next</string>
+    <string name="continue_button">Continue</string>
+    <string name="previous_button">Previous</string>
+    <string name="close">Close</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+
     <!-- Global -->
     <string name="childish_error_title">Uh oh something\'s wrong</string>
 
@@ -51,4 +69,9 @@
     <string name="foot_logo_descr">Logo of a one foot and 3 zeroes to make the number \'1000\'.</string>
     <string name="error_descr">Error icon</string>
     <string name="welcome_descr">Welcome banner with silly shapes and confetti</string>
+
+    <!-- Health connect -->
+    <array name="health_permissions">
+        <item>androidx.health.permission.Steps.READ</item>
+    </array>
 </resources>

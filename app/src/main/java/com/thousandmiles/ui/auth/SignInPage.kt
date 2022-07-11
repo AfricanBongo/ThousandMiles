@@ -56,7 +56,7 @@ fun SignInPage(
         )
 
         // Email
-        AuthenticationTextField(
+        TextFieldWithErrorOption(
             value = signInInfo.email,
             labelText = emailLabel,
             onValueChange = viewModel::onEmailChange,
@@ -64,7 +64,7 @@ fun SignInPage(
                 .fillMaxWidth()
                 .layoutId(emailF),
             isError = viewModel.validEmailFormatError || viewModel.blankEmailError,
-            onErrorShow = {
+            onError = {
                 val errorMessage: String = if (viewModel.validEmailFormatError) {
                     stringResource(id = R.string.invalid_email)
                 } else {
@@ -75,13 +75,13 @@ fun SignInPage(
         )
 
         // Password
-        AuthenticationTextField(
+        TextFieldWithErrorOption(
             value = signInInfo.password,
             labelText = passwordLabel,
             isPassword = true,
             onValueChange = viewModel::onPasswordChange,
             isError = viewModel.blankPasswordError,
-            onErrorShow = {
+            onError = {
                 TextFieldErrorMessage(
                     errorMessage = stringResource(id = R.string.blank_password)
                 )

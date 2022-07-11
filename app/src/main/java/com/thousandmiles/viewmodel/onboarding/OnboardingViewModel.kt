@@ -5,22 +5,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.thousandmiles.model.profile.UserProfile
+import com.thousandmiles.model.profile.user.User
+import com.thousandmiles.model.profile.user.toDateString
 import com.thousandmiles.model.profile.vehicle.Vehicle
 import com.thousandmiles.model.profile.vehicle.VehiclePricing
 import com.thousandmiles.model.profile.vehicle.VehicleType
 import com.thousandmiles.service.profile.UserProfileService
 import com.thousandmiles.service.profile.UserProfileWriteService
+import java.time.LocalDate
 
 class OnboardingViewModel: ViewModel() {
     private val service: UserProfileWriteService = UserProfileService
 
     private val blankProfile = UserProfile(
-        firstName = "",
-        lastName = "",
-        profilePhotoUri = "",
-        dateOfBirth = "",
-        nationalID = "",
-        mobilityDisabled = false,
+        user = User(
+            firstName = "",
+            lastName = "",
+            profilePhotoUri = "",
+            dateOfBirth = "",
+            nationalID = "",
+            mobilityDisabled = false,
+        ),
         vehicle = Vehicle(
             brandName = "",
             modelName = "",
@@ -29,9 +34,26 @@ class OnboardingViewModel: ViewModel() {
         )
     )
 
-    var userProfile: UserProfile by mutableStateOf(blankProfile)
+
+    var userInfo: User by mutableStateOf(blankProfile.user)
         private set
+    var vehicleInfo: Vehicle by mutableStateOf(blankProfile.vehicle)
+        private set
+
     var onboardingState: OnboardingState by mutableStateOf(OnboardingState.UserInput)
+        private set
+
+    val vehicleTypes: List<VehicleType> by lazy {
+        val values = VehicleType.values().toMutableList()
+        values.removeLast()
+        values
+    }
+
+    val vehiclePricings: List<VehiclePricing> by lazy {
+        val values = VehiclePricing.values().toMutableList()
+        values.removeLast()
+        values
+    }
 
     // Field errors
     var firstNameBlankError by mutableStateOf(false)
@@ -55,67 +77,59 @@ class OnboardingViewModel: ViewModel() {
 
 
     fun onFirstNameChange(newValue: String) {
-        userProfile = userProfile.copy(firstName = newValue)
+        userInfo = userInfo.copy(firstName = newValue)
         firstNameBlankError = false
     }
 
     fun onLastNameChange(newValue: String) {
-        userProfile = userProfile.copy(lastName = newValue)
+        userInfo = userInfo.copy(lastName = newValue)
         lastNameBlankError = false
     }
 
-    fun onDateOfBirthChange(newValue: String) {
-        userProfile = userProfile.copy(dateOfBirth = newValue)
+    fun onDateOfBirthChange(newValue: LocalDate) {
+        userInfo = userInfo.copy(dateOfBirth = toDateString(newValue))
         dateOfBirthBlankError = false
     }
 
     fun onProfilePhotoUriChange(newValue: String) {
-        userProfile = userProfile.copy(profilePhotoUri = newValue)
+        userInfo = userInfo.copy(profilePhotoUri = newValue)
     }
 
     fun onNationalIDChange(newValue: String) {
-        userProfile = userProfile.copy(dateOfBirth = newValue)
+        userInfo = userInfo.copy(nationalID = newValue)
         nationalIDBlankError = false
         invalidNationalIDError =
-            userProfile.isCorrectNationalIDLength() && !userProfile.isCorrectNationalIDFormat()
+            userInfo.isCorrectNationalIDLength() && !userInfo.isCorrectNationalIDFormat()
     }
 
     fun onMobilityDisabledChange(newValue: Boolean) {
-        userProfile = userProfile.copy(mobilityDisabled = newValue)
+        userInfo = userInfo.copy(mobilityDisabled = newValue)
     }
 
     fun onVehicleBrandNameChange(newValue: String) {
-        userProfile = userProfile.copy(
-            vehicle = userProfile.vehicle.copy(
-                brandName = newValue
-            )
+        vehicleInfo = vehicleInfo.copy(
+            brandName = newValue
         )
         brandNameBlankError = false
     }
 
     fun onVehicleModelNameChange(newValue: String) {
-        userProfile = userProfile.copy(
-            vehicle = userProfile.vehicle.copy(
-                modelName = newValue
-            )
+        vehicleInfo = vehicleInfo.copy(
+            modelName = newValue
         )
         modelNameBlankError = false
     }
 
     fun onVehicleTypeChange(newValue: VehicleType) {
-        userProfile = userProfile.copy(
-            vehicle = userProfile.vehicle.copy(
-                vehicleType = newValue
-            )
+        vehicleInfo = vehicleInfo.copy(
+            vehicleType = newValue
         )
         vehicleTypeBlankError = false
     }
 
     fun onVehiclePricingChange(newValue: VehiclePricing) {
-        userProfile = userProfile.copy(
-            vehicle = userProfile.vehicle.copy(
-                vehiclePricing = newValue
-            )
+        vehicleInfo = vehicleInfo.copy(
+            vehiclePricing = newValue
         )
         vehiclePricingBlankError = false
     }
@@ -133,10 +147,11 @@ class OnboardingViewModel: ViewModel() {
      * and false if one or more are blank or format is incorrect.
      */
     fun validateUserDetails(): Boolean {
-        firstNameBlankError = userProfile.firstName.isBlank()
-        lastNameBlankError = userProfile.lastName.isBlank()
-        dateOfBirthBlankError = userProfile.dateOfBirth.isBlank()
-        nationalIDBlankError = userProfile.nationalID.isBlank()
+        firstNameBlankError = userInfo.firstName.isBlank()
+        lastNameBlankError = userInfo.lastName.isBlank()
+        dateOfBirthBlankError = userInfo.dateOfBirth.isBlank()
+        nationalIDBlankError = userInfo.nationalID.isBlank()
+        invalidNationalIDError = !userInfo.isCorrectNationalIDFormat()
 
         if (!firstNameBlankError && !lastNameBlankError &&
                 !dateOfBirthBlankError && !nationalIDBlankError && !invalidNationalIDError)
@@ -146,16 +161,16 @@ class OnboardingViewModel: ViewModel() {
     }
 
     fun saveProfile() {
-        brandNameBlankError = userProfile.vehicle.brandName.isBlank()
-        modelNameBlankError = userProfile.vehicle.modelName.isBlank()
-        vehicleTypeBlankError = userProfile.vehicle.vehicleType == VehicleType.Blank
-        vehiclePricingBlankError = userProfile.vehicle.vehiclePricing == VehiclePricing.Blank
+        brandNameBlankError = vehicleInfo.brandName.isBlank()
+        modelNameBlankError = vehicleInfo.modelName.isBlank()
+        vehicleTypeBlankError = vehicleInfo.vehicleType == VehicleType.Blank
+        vehiclePricingBlankError = vehicleInfo.vehiclePricing == VehiclePricing.Blank
 
         if (!brandNameBlankError && !modelNameBlankError &&
                 !vehicleTypeBlankError && !vehiclePricingBlankError) {
             onboardingState = OnboardingState.Saving
             service.saveProfile(
-                profile = userProfile,
+                profile = UserProfile(userInfo, vehicleInfo),
                 onSaveSuccessful = { onboardingState = OnboardingState.SaveSuccess },
                 onSaveUnsuccessful = { error ->
                     onboardingState = OnboardingState.SaveFailure(error.message ?: "Unknown error")
@@ -169,20 +184,20 @@ class OnboardingViewModel: ViewModel() {
     }
 }
 
-private fun UserProfile.isCorrectNationalIDLength(): Boolean {
+private fun User.isCorrectNationalIDLength(): Boolean {
     return nationalID.length > 11
 }
 
-private fun UserProfile.isCorrectNationalIDFormat(): Boolean {
-    return nationalID.matches(Regex("^\\d{2}-\\d{7}[A-Z]-\\d{2}\$"))
+private fun User.isCorrectNationalIDFormat(): Boolean {
+    return formatNationalID(nationalID).matches(Regex("^\\d{2}-\\d{7}[A-Z]-\\d{2}\$"))
 }
 
-private fun formatNationalID(value: String): String {
+fun formatNationalID(value: String): String {
     val formattedIDStringBuilder = StringBuilder()
 
     if (value.length > 2) {
         val firstPortion = value.take(2)
-        val secondPortionEndIndex: Int = if (value.length > 10) 9 else value.length
+        val secondPortionEndIndex: Int = if (value.length > 10) 9 else value.length - 1
         val secondPortion = value.substring(2..secondPortionEndIndex)
 
         formattedIDStringBuilder
