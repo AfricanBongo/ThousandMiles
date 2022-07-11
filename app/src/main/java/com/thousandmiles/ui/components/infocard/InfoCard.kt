@@ -7,9 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import com.thousandmiles.ui.overview.InfoBox
 
 /**
  * Card that fills max width by default
@@ -22,15 +20,12 @@ fun InfoCard(
     childrenBodies: Pair<String, String>,
     colors: InfoCardColors,
     modifier: Modifier = Modifier,
-    customTitleBox: @Composable ((colors: InfoCardColors) -> Unit)?
+    customTitleBox: @Composable ((colors: InfoCardColors) -> Unit)? = null
 ) {
-    Column(Modifier
-        .fillMaxWidth()
-        .background(color = colors.cardBackgroundColor)
-        .then(modifier)) {
+    Column(modifier) {
 
         if (customTitleBox == null) {
-            Column(Modifier.background(color = Color.Transparent)) {
+            Column(Modifier.fillMaxWidth().background(color = Color.Transparent)) {
                 Text(
                     text = cardTitle,
                     style = MaterialTheme.typography.h6,
@@ -50,9 +45,10 @@ fun InfoCard(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        BoxWithConstraints(Modifier.fillMaxWidth()) {
-            val boxWidth = maxWidth - 4.dp
+        BoxWithConstraints(Modifier.fillMaxWidth().background(Color.Transparent)) {
+            val boxWidth = (maxWidth / 2) - 4.dp
             val spacerWidth = 8.dp
+
 
             Row {
                 InfoBox(
@@ -61,7 +57,7 @@ fun InfoCard(
                     titleColor = colors.childrenTitleColor,
                     bodyColor = colors.childrenBodyColor,
                     backgroundColor = colors.childrenBackgroundColor,
-                    modifier = Modifier.width(boxWidth)
+                    boxWidth = boxWidth
                 )
 
                 Spacer(modifier = Modifier.width(spacerWidth))
@@ -72,7 +68,7 @@ fun InfoCard(
                     titleColor = colors.childrenTitleColor,
                     bodyColor = colors.childrenBodyColor,
                     backgroundColor = colors.childrenBackgroundColor,
-                    modifier = Modifier.width(boxWidth)
+                    boxWidth = boxWidth
                 )
             }
         }

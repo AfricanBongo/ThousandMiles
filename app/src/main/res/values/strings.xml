@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Thousand Miles</string>
 
-    <!-- Authentication -->
+    <!-- Authentication screen-->
     <string name="auth_tagline_1">The journey of a</string>
     <string name="auth_tagline_2">miles</string>
     <string name="auth_tagline_3">begins with a single step!</string>
@@ -21,7 +21,7 @@
     <string name="signing_up">We are signing you right up!</string>
 
 
-    <!-- Onboarding -->
+    <!-- Onboarding screen-->
     <string name="welcome">You’re now part of the eco-warrior clan / fitness club / good citizens league / money-savers gang.
         \n\n
         Phew! That’s a lot of slashes.
@@ -55,12 +55,31 @@
     <string name="pricing_blank">Please provide the pricing of your vehicle</string>
 
     <!-- Buttons -->
-    <string name="next_button">Next</string>
-    <string name="continue_button">Continue</string>
-    <string name="previous_button">Previous</string>
-    <string name="close">Close</string>
-    <string name="sign_in">Sign in</string>
-    <string name="sign_up">Sign up</string>
+    <string name="next_btn">Next</string>
+    <string name="continue_btn">Continue</string>
+    <string name="previous_btn">Previous</string>
+    <string name="close_btn">Close</string>
+    <string name="sign_in_btn">Sign in</string>
+    <string name="sign_up_btn">Sign up</string>
+    <string name="claim_discount_btn">Claim discount</string>
+    <string name="health_connect_btn">Download Health Connect</string>
+
+    <!-- Overview screen -->
+    <string name="fuel_price_title">Average fuel price</string>
+    <string name="best_offer_title">Best offer</string>
+    <string name="steps_title">Steps</string>
+    <string name="distance_title">Distance covered</string>
+    <string name="active_title">Active time</string>
+    <string name="emissions_title">Carbon emission mass reduced</string>
+    <string name="emission_d_avg_title">My daily average</string>
+    <string name="emission_p_avg_title">Population average</string>
+
+    <!-- Health Connect screen -->
+    <string name="no_health_connect">Mmmm, seems like you don\'t have the <b>Health Connect App</b> installed,
+    which helps us calculate your wonderful discounts.
+        \n\n
+        Click the button below to download it from the Play Store (it\'s safe!)
+    </string>
 
     <!-- Global -->
     <string name="childish_error_title">Uh oh something\'s wrong</string>
@@ -73,5 +92,7 @@
     <!-- Health connect -->
     <array name="health_permissions">
         <item>androidx.health.permission.Steps.READ</item>
+        <item>androidx.health.permission.Distance.READ</item>
+        <item>androidx.health.permission.ActivitySession.READ</item>
     </array>
 </resources>

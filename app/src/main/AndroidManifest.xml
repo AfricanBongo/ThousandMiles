@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <activity name=".PermissionsRationaleActivity"
+        <activity android:name=".PermissionsRationaleActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE"/>

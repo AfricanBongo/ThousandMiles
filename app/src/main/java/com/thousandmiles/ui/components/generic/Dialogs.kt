@@ -120,7 +120,7 @@ fun AppErrorDialog(
                     .height(60.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.close),
+                    text = stringResource(id = R.string.close_btn),
                     style = MaterialTheme.typography.body1
                 )
             }

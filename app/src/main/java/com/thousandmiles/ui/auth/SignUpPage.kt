@@ -39,7 +39,7 @@ fun SignUpPage(
     val emailLabel = stringResource(id = R.string.email)
     val passwordLabel = stringResource(id = R.string.password)
     val confirmPasswordLabel = stringResource(id = R.string.confirm_password)
-    val signUpButtonLabel = stringResource(id = R.string.sign_up)
+    val signUpButtonLabel = stringResource(id = R.string.sign_up_btn)
 
     // State that contains all values for the fields.
     val signUpInfo = viewModel.signUpInfo

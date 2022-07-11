@@ -87,9 +87,9 @@ fun AuthenticationScreen(
             // Pages for view pager
             val pages: List<String> = listOf(
                 // Sign-in page
-                stringResource(id = R.string.sign_in),
+                stringResource(id = R.string.sign_in_btn),
                 // Sign-out page
-                stringResource(id = R.string.sign_up)
+                stringResource(id = R.string.sign_up_btn)
             )
 
             // Tabs for Sign In and Sign Up page.

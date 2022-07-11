@@ -40,7 +40,7 @@ fun SignInPage(
     val emailLabel = stringResource(id = R.string.email)
     val passwordLabel = stringResource(id = R.string.password)
     val forgotPasswordLabel = stringResource(id = R.string.forgot_pass)
-    val signInButtonLabel = stringResource(id = R.string.sign_in)
+    val signInButtonLabel = stringResource(id = R.string.sign_in_btn)
 
     val signInInfo = viewModel.signInInfo
     val authState = viewModel.authenticationState

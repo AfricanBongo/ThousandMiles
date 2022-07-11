@@ -18,8 +18,6 @@ import com.thousandmiles.ui.components.HeaderText
 import com.thousandmiles.ui.components.MDropDownMenu
 import com.thousandmiles.ui.components.PrimaryButton
 import com.thousandmiles.ui.components.TextFieldErrorMessage
-import com.thousandmiles.ui.onboarding.vehicle.VehiclePricingMenuItem
-import com.thousandmiles.ui.onboarding.vehicle.VehicleTypeMenuItem
 import com.thousandmiles.viewmodel.onboarding.OnboardingViewModel
 
 @Composable
@@ -35,8 +33,8 @@ fun VehicleDetailsPage(
     val modelLabel = stringResource(id = R.string.model)
     val typeLabel = stringResource(id = R.string.type)
     val priceLabel = stringResource(id = R.string.price)
-    val continueButtonLabel = stringResource(id = R.string.continue_button)
-    val previousButtonLabel = stringResource(id = R.string.previous_button)
+    val continueButtonLabel = stringResource(id = R.string.continue_btn)
+    val previousButtonLabel = stringResource(id = R.string.previous_btn)
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),

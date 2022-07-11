@@ -1,10 +1,14 @@
 package com.thousandmiles.ui.nav
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -13,12 +17,13 @@ import com.thousandmiles.ui.auth.AuthenticationScreen
 import com.thousandmiles.ui.overview.OverviewScreen
 import com.thousandmiles.ui.onboarding.OnboardingNavigationScreen
 import com.thousandmiles.ui.onboarding.WelcomePage
+import com.thousandmiles.ui.permissions.HealthConnectScreen
 
 /**
  * A navigation destination within the app.
  */
 enum class NavScreen {
-    Auth, Overview, Onboarding, Welcome
+    Auth, Overview, Onboarding, Welcome, HealthConnect
 }
 
 /**
@@ -36,7 +41,10 @@ fun MNavHost(navController: NavHostController) {
         navController = navController,
         startDestination = if (authenticated) NavScreen.Onboarding.name else NavScreen.Auth.name
     ) {
-        composable(route = NavScreen.Auth.name) {
+
+        composable(
+            route = NavScreen.Auth.name,
+        ) {
             AuthenticationScreen {
                 navController.navigate(NavScreen.Onboarding.name)
             }
@@ -44,51 +52,40 @@ fun MNavHost(navController: NavHostController) {
 
         composable(
             route = NavScreen.Onboarding.name,
-            enterTransition = {
-                when (initialState.destination.route) {
-                    NavScreen.Auth.name ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up)
-                    else -> null
-                }
-            },
         ) {
             OnboardingNavigationScreen(
                 onFinishedOnboarding = {
                     navController.navigate(NavScreen.Welcome.name)
                 },
                 onShouldNotOnboard = {
-                    navController.navigate(NavScreen.Overview.name)
+                    navController.navigate(NavScreen.HealthConnect.name)
                 }
             )
         }
 
         composable(
             route = NavScreen.Welcome.name,
-            enterTransition = {
-                when (initialState.destination.route) {
-                    NavScreen.Onboarding.name ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up)
-                    else -> null
-                }
-            }
         ) {
-            WelcomePage(Modifier.fillMaxSize()) {
+            WelcomePage(Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)
+            ) {
+                navController.navigate(NavScreen.HealthConnect.name)
+            }
+        }
+
+        composable(
+            route = NavScreen.HealthConnect.name,
+        ) {
+            HealthConnectScreen {
                 navController.navigate(NavScreen.Overview.name)
             }
         }
 
         composable(
             route = NavScreen.Overview.name,
-            enterTransition = {
-                when (initialState.destination.route) {
-                    NavScreen.Onboarding.name ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up)
-                    else -> null
-                }
-            },
         ) {
             OverviewScreen()
         }
-
     }
 }

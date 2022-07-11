@@ -1,4 +1,4 @@
-package com.thousandmiles.ui.onboarding
+package com.thousandmiles.ui.onboarding.user
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -72,7 +72,7 @@ fun UserDetailsPage(
     val dobLabel = stringResource(id = R.string.dob)
     val dobDialogTitle = stringResource(id = R.string.dob_title)
     val mobilityLabel = stringResource(id = R.string.mobility)
-    val nextButtonLabel = stringResource(id = R.string.next_button)
+    val nextButtonLabel = stringResource(id = R.string.next_btn)
 
     // User profile information
     val userProfile = viewModel.userInfo

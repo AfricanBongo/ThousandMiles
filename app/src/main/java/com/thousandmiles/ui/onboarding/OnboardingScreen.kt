@@ -18,6 +18,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.thousandmiles.R
 import com.thousandmiles.ui.components.AppErrorDialog
 import com.thousandmiles.ui.components.LoadingDialog
+import com.thousandmiles.ui.onboarding.user.UserDetailsPage
 import com.thousandmiles.ui.onboarding.vehicle.VehicleDetailsPage
 import com.thousandmiles.viewmodel.onboarding.OnboardingState
 import com.thousandmiles.viewmodel.onboarding.OnboardingViewModel

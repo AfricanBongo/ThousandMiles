@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.thousandmiles"
-        minSdk 26
+        minSdk 28
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -52,6 +52,9 @@ dependencies {
     def accompanist_version = "0.24.13-rc"
     def coil_version = "2.1.0"
     def compose_material_dialogs_version = "0.8.1-rc"
+
+    // GSON
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     // Health Connect API
     implementation 'androidx.health:health-connect-client:1.0.0-alpha02'

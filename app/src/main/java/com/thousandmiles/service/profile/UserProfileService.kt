@@ -4,7 +4,9 @@ import android.net.Uri
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.gson.Gson
 import com.thousandmiles.model.profile.UserProfile
+import com.thousandmiles.model.profile.user.User
 import com.thousandmiles.service.auth.AuthService
 import java.io.File
 
@@ -48,15 +50,18 @@ object UserProfileService: UserProfileReadService, UserProfileWriteService {
 
     override
     fun readProfile(
-        onDataChange: (UserProfile) -> Unit,
+        onDataChange: (User) -> Unit,
         onDataReadUnsuccessful: (Throwable) -> Unit
     ) {
-
         val uid = AuthService.uid
         if (uid != null) {
-            databaseReference.child(uid).addValueEventListener(object : ValueEventListener{
+            databaseReference.child(uid).child("user").addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    onDataChange(snapshot.getValue(UserProfile::class.java)!!)
+                    print(snapshot)
+                    val gson = Gson()
+                    val json = gson.toJson(snapshot.value)
+                    val userObject: User = gson.fromJson(json, User::class.java)
+                    onDataChange(userObject)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
