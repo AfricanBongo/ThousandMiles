@@ -36,7 +36,7 @@ higher fitness levels as those people are less prone to succumbing to ailments.
 
 | Sign In screen | Sign Up screen |
 | --- | --- |
-| <img src="https://github.com/AfricanBongo/ThousandMiles/blob/master/screenshots/sign_in.png" width="180" height="400" alt="Sign in screen image"/> | <img src="https://github.com/AfricanBongo/ThousandMiles/blob/master/screenshots/sign_up.png" width="180" height="400" alt="Sign up screen image"/> |
+| <img src="https://github.com/AfricanBongo/ThousandMiles/blob/master/screenshots/sign_in.png" width="240" height="533" alt="Sign in screen image"/> | <img src="https://github.com/AfricanBongo/ThousandMiles/blob/master/screenshots/sign_up.png" width="240" height="533" alt="Sign up screen image"/> |
 
 </br>
 
